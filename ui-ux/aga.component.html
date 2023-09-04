@@ -1,0 +1,37 @@
+<div class="chat">
+  <mat-form-field appearance="fill" color="primary" class="chat-box">
+    <input matInput [formControl]="chatControl" (keydown.enter)=send()>
+    <span matPrefix class="prefix">User:</span>
+    <mat-icon class="check" matSuffix (click)="send()" *ngIf="!clicked">arrow_forward</mat-icon>
+    <span class="saving" matSuffix *ngIf="clicked">...</span>
+  </mat-form-field>
+  <div class="history">
+    <div *ngFor="let event of stream | async; let i = index">
+      <div *ngIf="i==0; else others" class="mat-caption"
+           [ngStyle]="{'color': event.who === 1 ? 'var(--color-primary)' : 'var(--color-accent)'}"
+           [ngClass]="'line' + i">
+          <span class="who"
+          >{{agaPlayers[event.who]}}</span>
+          <span class="when"
+                [ngStyle]="{'color': event.who === 1 ? 'var(--color-primary-light)' : 'var(--color-accent-light)'}"
+          >[{{howLongAgo(event.timestamp)}}]</span>
+        <span class="text"> {{event.text}}</span>
+      </div>
+      <ng-template #others>
+        <div class="stream mat-caption" [@slideDown]
+             [ngStyle]="{'color': event.who === 1 ? 'var(--color-primary)' : 'var(--color-accent)'}"
+             [ngClass]="'line' + i"
+             [@fadeInOut]="i === 8 ? 'fadeOut': ''">
+
+          <span class="who">{{agaPlayers[event.who]}}</span>
+            <span class="when"
+                  [ngStyle]="{'color': event.who === 1 ? 'var(--color-primary-light)' : 'var(--color-accent-light)'}"
+            > [{{howLongAgo(event.timestamp)}}] </span>
+          <span class="text"> {{event.text}}</span>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="debug"></div>
+</div>
